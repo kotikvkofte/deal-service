@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: fill-deal_status
+      author: Artyom
+      comment: "Заполнение таблицы deal_status"
+      changes:
+        - loadData:
+            file: db/changelog/csv/deal_status.csv
+            tableName: deal_status
+            separator: ";"
+            encoding: UTF-8

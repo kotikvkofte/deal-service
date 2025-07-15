@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-currency
+      author: Atyom
+      comment: "Создание таблицы currency (коды валют)"
+      changes:
+        - createTable:
+            tableName: currency
+            columns:
+              - column:
+                  name: id
+                  type: varchar(3)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: true

@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-contractor_to_role
+      author: Artyom
+      comment: "Создание таблицы contractor_to_role (роли контрагентов в сделке)"
+      changes:
+        - createTable:
+            tableName: contractor_to_role
+            columns:
+              - column:
+                  name: contractor_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: contractor_to_role
+            columnNames: contractor_id, role_id
+            constraintName: pk_contractor_to_role
+
+        - addForeignKeyConstraint:
+            baseTableName: contractor_to_role
+            baseColumnNames: contractor_id
+            constraintName: fk_deal_contractor_contractor_to_role
+            referencedTableName: deal_contractor
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: contractor_to_role
+            baseColumnNames: role_id
+            constraintName: fk_contractor_role_contractor_to_role
+            referencedTableName: contractor_role
+            referencedColumnNames: id

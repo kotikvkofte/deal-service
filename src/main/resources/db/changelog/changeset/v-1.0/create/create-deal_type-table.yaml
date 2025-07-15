@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-deal_type
+      author: Artyom
+      comment: "Создание таблицы deal_type (типы сделок)"
+      changes:
+        - createTable:
+            tableName: deal_type
+            columns:
+              - column:
+                  name: id
+                  type: varchar(30)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false

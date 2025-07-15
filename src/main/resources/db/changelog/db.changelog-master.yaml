@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-currency-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-deal_status-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-deal_type-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-deal-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-deal_contractor-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-deal_sum-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-contractor_role-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/create/create-contractor_to_role-table.yaml
+
+  - include:
+      file: db/changelog/changeset/v-1.0/fill/fill-currency-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/fill/fill-deal_status-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/fill/fill-deal_type-table.yaml
+  - include:
+      file: db/changelog/changeset/v-1.0/fill/fill-contractor_role-table.yaml

@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-contractor_role
+      author: Artyom
+      comment: "Создание таблицы contractor_role (роли контрагентов)"
+      changes:
+        - createTable:
+            tableName: contractor_role
+            columns:
+              - column:
+                  name: id
+                  type: varchar(30)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false

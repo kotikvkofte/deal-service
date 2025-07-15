@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: deal-service
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/deal-service-db
+#    username: user
+#    password: 1
+
+logging:
+  level:
+    org:
+      springframework:
+        transaction: DEBUG
+        jdbc:
+          core: DEBUG

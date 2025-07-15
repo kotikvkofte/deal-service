@@ -1,0 +1,77 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-deal_contractor
+      author: Artyom
+      comment: "Создание таблицы deal_contractor (контрагенты сделки)"
+      changes:
+        - createTable:
+            tableName: deal_contractor
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: deal_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: contractor_id
+                  type: varchar(12)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inn
+                  type: text
+              - column:
+                  name: main
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_date
+                  type: timestamp
+                  defaultValue: now
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_date
+                  type: timestamp
+              - column:
+                  name: create_user_id
+                  type: text
+              - column:
+                  name: modify_user_id
+                  type: text
+              - column:
+                  name: is_active
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: deal_contractor
+            baseColumnNames: deal_id
+            constraintName: fk_deal_contractor_deal
+            referencedTableName: deal
+            referencedColumnNames: id
+
+        - createIndex:
+            indexName: idx_deal_contractor_unique_main
+            tableName: deal_contractor
+            unique: true
+            columns:
+              - column:
+                  name: deal_id
+              - column:
+                  name: main
