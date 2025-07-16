@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -25,24 +26,21 @@ public class DealContractorSaveRequestDto {
 
     @Schema(
             description = "ID of the deal this contractor belongs to",
-            example = "8e13d5a0-4298-49f3-a262-ea77ec628ac3",
-            required = true
+            example = "8e13d5a0-4298-49f3-a262-ea77ec628ac3"
     )
     @NotNull
-    private String dealId;
+    private UUID dealId;
 
     @Schema(
             description = "ID of the contractor from the contractor service",
-            example = "CTR119",
-            required = true
+            example = "CTR119"
     )
     @NotNull
     private String contractorId;
 
     @Schema(
             description = "Name of the contractor",
-            example = "Contractor Ltd",
-            required = true
+            example = "Contractor Ltd"
     )
     private String name;
 

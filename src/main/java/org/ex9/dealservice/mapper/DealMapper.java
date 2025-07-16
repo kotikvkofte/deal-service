@@ -72,7 +72,7 @@ public class DealMapper {
             return null;
         }
         return DealResponseDto.builder()
-                .id(deal.getId().toString())
+                .id(deal.getId())
                 .description(deal.getDescription())
                 .agreementNumber(deal.getAgreementNumber())
                 .agreementDate(deal.getAgreementDate())

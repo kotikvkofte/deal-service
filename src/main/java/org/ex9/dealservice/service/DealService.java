@@ -11,8 +11,6 @@ import org.ex9.dealservice.exception.DealNotFondException;
 import org.ex9.dealservice.exception.DealStatusNotFondException;
 import org.ex9.dealservice.mapper.DealMapper;
 import org.ex9.dealservice.model.Deal;
-import org.ex9.dealservice.repository.ContractorToRoleRepository;
-import org.ex9.dealservice.repository.DealContractorRepository;
 import org.ex9.dealservice.repository.DealRepository;
 import org.ex9.dealservice.repository.DealSpecification;
 import org.ex9.dealservice.repository.DealStatusRepository;
@@ -40,8 +38,6 @@ public class DealService {
     private final DealStatusRepository dealStatusRepository;
     private final DealMapper dealMapper;
     private final DealSumRepository dealSumRepository;
-    private final DealContractorRepository dealContractorRepository;
-    private final ContractorToRoleRepository contractorToRoleRepository;
 
     /**
      * Создает новую сделку или обновляет существующую.
@@ -58,7 +54,7 @@ public class DealService {
         if (isNewDeal) {
             deal = dealMapper.toNewDeal(request);
         } else {
-            var foundDeal = dealRepository.findById(UUID.fromString(request.getId()))
+            var foundDeal = dealRepository.findById(request.getId())
                     .orElseThrow(() -> new DealNotFondException("Deal with id '" + request.getId() + "' not found"));
             deal = dealMapper.toUpdateDeal(request, foundDeal);
         }
@@ -89,7 +85,7 @@ public class DealService {
     @Transactional
     public void changeStatus(DealChangeStatusDto request) {
 
-        var deal = dealRepository.findByIdAndIsActiveTrue(UUID.fromString(request.getDealId()))
+        var deal = dealRepository.findByIdAndIsActiveTrue(request.getDealId())
                 .orElseThrow(() -> new DealNotFondException("Deal with id '" + request.getDealId() + "' not found"));
 
         var status = dealStatusRepository.findByIdAndIsActiveIsTrue((request.getStatusId()))
@@ -106,8 +102,8 @@ public class DealService {
      * @return DTO сделки
      */
     @Transactional(readOnly = true)
-    public DealResponseDto getDealById(String id) {
-        Deal deal = dealRepository.findByIdAndIsActiveTrue(UUID.fromString(id))
+    public DealResponseDto getDealById(UUID id) {
+        Deal deal = dealRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new DealNotFondException("Deal with id '" + id + "' not found"));
 
         return dealMapper.toDealResponseDto(deal);

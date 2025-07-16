@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -21,7 +22,7 @@ public class DealResponseDto {
             description = "Unique identifier of the deal",
             example = "8e13d5a0-4298-49f3-a262-ea77ec628ac3"
     )
-    private String id;
+    private UUID id;
 
     @Schema(
             description = "Description of the deal"

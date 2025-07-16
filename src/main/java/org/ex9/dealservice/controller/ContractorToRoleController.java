@@ -26,14 +26,22 @@ import org.ex9.dealservice.dto.ErrorResponse;
 @Tag(name = "Contractor To Role Controller", description = "Endpoints for managing contractor roles in deals")
 public class ContractorToRoleController {
 
-    private final ContractorToRoleService service;
+    private final ContractorToRoleService contractorToRoleService;
 
     @PostMapping("/add")
     @Operation(summary = "Add a role to contractor", description = "Adds a new role to an existing deal contractor.")
-
-    public ResponseEntity<?> addRoleToContractor(@Valid @RequestBody ContractorToRoleDto request) {
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Add role to contractor"),
+            @ApiResponse(responseCode = "404",
+                    description = "Contractor id or role id is not fount",
+                    content = @Content(
+                            mediaType = "application/APPLICATION_JSON_VALUE",
+                            schema = @Schema(implementation = ErrorResponse.class)
+                    ))
+    })
+    public ResponseEntity<Void> addRoleToContractor(@Valid @RequestBody ContractorToRoleDto request) {
         log.debug("Request to add role to contractor: {}", request);
-        service.addNewRole(request);
+        contractorToRoleService.addNewRole(request);
         return ResponseEntity.ok().build();
     }
 
@@ -47,9 +55,9 @@ public class ContractorToRoleController {
                             schema = @Schema(implementation = ErrorResponse.class)
                     ))
     })
-    public ResponseEntity<?> deleteRoleToContractor(@Valid @RequestBody ContractorToRoleDto contractorToRole) {
+    public ResponseEntity<Void> deleteRoleToContractor(@Valid @RequestBody ContractorToRoleDto contractorToRole) {
         log.debug("Request to delete role from contractor: {}", contractorToRole);
-        service.deleteRole(contractorToRole);
+        contractorToRoleService.deleteRole(contractorToRole);
         return ResponseEntity.ok().build();
     }
 

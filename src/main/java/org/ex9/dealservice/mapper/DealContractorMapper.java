@@ -8,7 +8,6 @@ import org.ex9.dealservice.repository.DealRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 /**
  * Маппер для преобразования DTO контрагента сделки в сущность и обратно.
@@ -32,7 +31,7 @@ public class DealContractorMapper {
      */
     public DealContractor toNewDealContractor(DealContractorSaveRequestDto request) {
 
-        var deal = dealRepository.findByIdAndIsActiveTrue(UUID.fromString(request.getDealId()))
+        var deal = dealRepository.findByIdAndIsActiveTrue(request.getDealId())
                 .orElseThrow(() -> new DealNotFondException("Deal with id " + request.getDealId() + " not found"));
 
         return DealContractor.builder()
@@ -55,7 +54,7 @@ public class DealContractorMapper {
      * @throws DealNotFondException если сделка не найдена
      */
     public DealContractor toUpdateDealContractor(DealContractorSaveRequestDto request, DealContractor contractor) {
-        var deal = dealRepository.findByIdAndIsActiveTrue(UUID.fromString(request.getDealId()))
+        var deal = dealRepository.findByIdAndIsActiveTrue(request.getDealId())
                 .orElseThrow(() -> new DealNotFondException("Deal with id " + request.getDealId() + " not found"));
         contractor.setDeal(deal);
         contractor.setContractorId(request.getContractorId());
