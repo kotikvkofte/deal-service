@@ -85,7 +85,7 @@ class DealServiceTest {
         UUID dealId = UUID.randomUUID();
         var sumDto = new DealSumDto("200000", "USD");
         var request = DealSaveRequestDto.builder()
-                .id(dealId.toString())
+                .id(dealId)
                 .description("Updated Deal")
                 .sum(sumDto)
                 .build();
@@ -116,7 +116,7 @@ class DealServiceTest {
     void testDealSave_updateDeal_notFound() {
         UUID dealId = UUID.randomUUID();
         DealSaveRequestDto request = new DealSaveRequestDto();
-        request.setId(dealId.toString());
+        request.setId(dealId);
 
         when(dealRepository.findById(dealId)).thenReturn(Optional.empty());
 
@@ -132,7 +132,7 @@ class DealServiceTest {
     void testChangeStatus_success() {
         DealChangeStatusDto request = new DealChangeStatusDto();
         UUID dealId = UUID.randomUUID();
-        request.setDealId(dealId.toString());
+        request.setDealId(dealId);
         request.setStatusId("ACTIVE");
 
         Deal deal = new Deal();
@@ -155,7 +155,7 @@ class DealServiceTest {
     @Test
     void testChangeStatus_dealNotFound() {
         UUID dealId = UUID.randomUUID();
-        DealChangeStatusDto request = new DealChangeStatusDto(dealId.toString(), "ACTIVE");
+        DealChangeStatusDto request = new DealChangeStatusDto(dealId, "ACTIVE");
 
         when(dealRepository.findByIdAndIsActiveTrue(dealId)).thenReturn(Optional.empty());
 
@@ -170,7 +170,7 @@ class DealServiceTest {
     @Test
     void testChangeStatus_statusNotFound() {
         UUID dealId = UUID.randomUUID();
-        DealChangeStatusDto request = new DealChangeStatusDto(dealId.toString(), "ACTIVE");
+        DealChangeStatusDto request = new DealChangeStatusDto(dealId, "ACTIVE");
 
         Deal deal = new Deal();
         deal.setId(dealId);
@@ -188,25 +188,25 @@ class DealServiceTest {
 
     @Test
     void testGetDealById_success() {
-        String dealId = UUID.randomUUID().toString();
-        Deal deal = Deal.builder().id(UUID.fromString(dealId)).build();
+        UUID dealId = UUID.randomUUID();
+        Deal deal = Deal.builder().id(dealId).build();
         var responseDto = DealResponseDto.builder().id(dealId).build();
 
-        when(dealRepository.findByIdAndIsActiveTrue(UUID.fromString(dealId))).thenReturn(Optional.of(deal));
+        when(dealRepository.findByIdAndIsActiveTrue(dealId)).thenReturn(Optional.of(deal));
         when(dealMapper.toDealResponseDto(deal)).thenReturn(responseDto);
 
         DealResponseDto result = service.getDealById(dealId);
 
         assertEquals(responseDto, result);
-        verify(dealRepository, times(1)).findByIdAndIsActiveTrue(UUID.fromString(dealId));
+        verify(dealRepository, times(1)).findByIdAndIsActiveTrue(dealId);
         verify(dealMapper, times(1)).toDealResponseDto(deal);
     }
 
     @Test
     void testGetDealById_notFound() {
-        String dealId = UUID.randomUUID().toString();
+        UUID dealId = UUID.randomUUID();
 
-        when(dealRepository.findByIdAndIsActiveTrue(UUID.fromString(dealId))).thenReturn(Optional.empty());
+        when(dealRepository.findByIdAndIsActiveTrue(dealId)).thenReturn(Optional.empty());
 
         DealNotFondException exception = assertThrows(
                 DealNotFondException.class,

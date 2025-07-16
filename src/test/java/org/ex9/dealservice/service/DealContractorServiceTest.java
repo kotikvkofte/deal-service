@@ -41,7 +41,7 @@ class DealContractorServiceTest {
         UUID dealId = UUID.randomUUID();
         var id = UUID.randomUUID();
         var request = DealContractorSaveRequestDto.builder()
-                .dealId(dealId.toString())
+                .dealId(dealId)
                 .contractorId("CONTR1")
                 .name("John Doe")
                 .inn("1234567890")
@@ -69,7 +69,7 @@ class DealContractorServiceTest {
         UUID contractorId = UUID.randomUUID();
         DealContractorSaveRequestDto request = DealContractorSaveRequestDto.builder()
                 .id(contractorId.toString())
-                .dealId(UUID.randomUUID().toString())
+                .dealId(UUID.randomUUID())
                 .contractorId("CONTR1")
                 .name("John Doe")
                 .inn("1234567890")
@@ -104,7 +104,7 @@ class DealContractorServiceTest {
         UUID contractorId = UUID.randomUUID();
         var request = DealContractorSaveRequestDto.builder()
                 .id(contractorId.toString())
-                .dealId(UUID.randomUUID().toString())
+                .dealId(UUID.randomUUID())
                 .build();
 
         when(dealContractorRepository.findByIdAndIsActiveTrue(contractorId)).thenReturn(Optional.empty());
