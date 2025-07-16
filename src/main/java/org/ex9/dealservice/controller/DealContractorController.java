@@ -107,7 +107,7 @@ public class DealContractorController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteContractor(@PathVariable UUID id) {
         dealContractorService.deleteDealContractor(id);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -58,7 +58,7 @@ public class ContractorToRoleController {
     public ResponseEntity<Void> deleteRoleToContractor(@Valid @RequestBody ContractorToRoleDto contractorToRole) {
         log.debug("Request to delete role from contractor: {}", contractorToRole);
         contractorToRoleService.deleteRole(contractorToRole);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

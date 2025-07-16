@@ -183,7 +183,7 @@ class DealContractorControllerTest {
 
         mockMvc.perform(delete("/deal-contractor/delete/" + id)
                         .contentType(String.valueOf(MediaType.APPLICATION_JSON)))
-                .andExpect(status().isAccepted());
+                .andExpect(status().isNoContent());
 
         verify(service, times(1)).deleteDealContractor(id);
     }

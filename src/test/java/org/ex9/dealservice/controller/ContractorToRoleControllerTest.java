@@ -89,7 +89,7 @@ class ContractorToRoleControllerTest {
         mockMvc.perform(delete("/contractor-to-role/delete")
                         .contentType(String.valueOf(MediaType.APPLICATION_JSON))
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(service, times(1)).deleteRole(any(ContractorToRoleDto.class));
     }
