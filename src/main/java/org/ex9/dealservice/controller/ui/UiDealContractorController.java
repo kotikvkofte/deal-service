@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.ex9.dealservice.dto.DealContractorSaveRequestDto;
 import org.ex9.dealservice.dto.ErrorResponse;
 import org.ex9.dealservice.service.DealContractorService;
+import org.ex9.dealservice.util.AuthInfo;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -86,7 +87,7 @@ public class UiDealContractorController {
     })
     @PutMapping("/save")
     public ResponseEntity<UUID> saveContractor(@Valid @RequestBody DealContractorSaveRequestDto request) {
-        return ResponseEntity.ok(dealContractorService.saveDealContractor(request));
+        return ResponseEntity.ok(dealContractorService.saveDealContractor(request, AuthInfo.getUsername()));
     }
 
     @PreAuthorize("hasAnyAuthority('DEAL_SUPERUSER', 'SUPERUSER')")
