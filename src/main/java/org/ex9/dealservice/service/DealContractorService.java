@@ -49,6 +49,31 @@ public class DealContractorService {
     }
 
     /**
+     * Сохраняет нового или обновляет существующего контрагента сделки.
+     *
+     * @param request DTO с данными контрагента сделки
+     * @return UUID сохраненного контрагента
+     */
+    @Transactional
+    public UUID saveDealContractor(DealContractorSaveRequestDto request, String userId) {
+
+        DealContractor dealContractor;
+        boolean isNewContractor = request.getId() == null;
+
+        if (isNewContractor) {
+            dealContractor = dealContractorMapper.toNewDealContractor(request);
+            dealContractor.setCreateUserId(userId);
+        } else {
+            var foundDealContractor = dealContractorRepository.findByIdAndIsActiveTrue(UUID.fromString(request.getId()))
+                    .orElseThrow(() -> new DealContractorNotFondException("Contractor with id '" + request.getId() + "' not found"));
+            dealContractor = dealContractorMapper.toUpdateDealContractor(request, foundDealContractor);
+            dealContractor.setModifyUserId(userId);
+        }
+
+        return dealContractorRepository.save(dealContractor).getId();
+    }
+
+    /**
      * Логически удаляет контрагента сделки по его идентификатору.
      *
      * @param dealContractorId идентификатор контрагента
