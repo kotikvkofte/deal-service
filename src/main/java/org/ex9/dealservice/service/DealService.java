@@ -65,6 +65,33 @@ public class DealService {
     }
 
     /**
+     * Создает новую сделку или обновляет существующую.
+     * При создании устанавливает статус по умолчанию.
+     *
+     * @param request DTO с данными сделки
+     * @return UUID сохранённой сделки
+     */
+    @Transactional
+    public UUID dealSave(DealSaveRequestDto request, String userId) {
+        Deal deal;
+        boolean isNewDeal = request.getId() == null;
+
+        if (isNewDeal) {
+            deal = dealMapper.toNewDeal(request);
+            deal.setCreateUserId(userId);
+        } else {
+            var foundDeal = dealRepository.findById(request.getId())
+                    .orElseThrow(() -> new DealNotFondException("Deal with id '" + request.getId() + "' not found"));
+            deal = dealMapper.toUpdateDeal(request, foundDeal);
+            deal.setModifyUserId(userId);
+        }
+        var result = dealRepository.save(deal);
+        addDealSum(request.getSum(), deal);
+
+        return result.getId();
+    }
+
+    /**
      * Добавляет или обновляет сумму сделки.
      *
      * @param dto  DTO суммы сделки
