@@ -9,6 +9,10 @@ spring:
 #    username: user
 #    password: 1
 
+jwt:
+  secret: some_secret_code_aasdk;j1239;lkasf9o8
+  expiration: 1200000
+
 logging:
   level:
     org:

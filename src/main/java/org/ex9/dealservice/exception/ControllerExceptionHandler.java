@@ -1,5 +1,6 @@
 package org.ex9.dealservice.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,11 +8,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.ex9.dealservice.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.security.SignatureException;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler {
@@ -188,6 +193,51 @@ public class ControllerExceptionHandler {
     public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         String message = e.getMessage().contains("UUID") ? "Invalid UUID format" : "Invalid request format";
         return new ErrorResponse(message);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    @ApiResponse(
+            responseCode = "403",
+            description = "Access Denied",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)
+            )
+    )
+    public ErrorResponse handleAccessDeniedException(AccessDeniedException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    @ApiResponse(
+            responseCode = "403",
+            description = "The JWT signature is invalid",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)
+            )
+    )
+    public ErrorResponse handleSignatureException(SignatureException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    @ApiResponse(
+            responseCode = "403",
+            description = "The JWT token has expired",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ErrorResponse.class)
+            )
+    )
+    public ErrorResponse handleExpiredJwtException(ExpiredJwtException e) {
+        return new ErrorResponse(e.getMessage());
     }
 
 }
