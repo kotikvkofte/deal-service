@@ -8,6 +8,7 @@ import org.ex9.dealservice.repository.DealRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Маппер для преобразования DTO контрагента сделки в сущность и обратно.
@@ -61,7 +62,7 @@ public class DealContractorMapper {
         contractor.setName(request.getName());
         contractor.setInn(request.getInn());
         contractor.setMain(request.isMain());
-        contractor.setModifyDate(LocalDate.now());
+        contractor.setModifyDate(LocalDateTime.now());
         contractor.setModifyUserId(null);
 
         return contractor;

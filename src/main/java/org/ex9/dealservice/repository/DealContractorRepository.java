@@ -19,4 +19,6 @@ public interface DealContractorRepository extends JpaRepository<DealContractor, 
     @Modifying
     void logicalDeleteById(UUID id);
 
+    List<DealContractor> findAllByContractorIdAndIsActiveTrue(String contractorId);
+
 }
