@@ -24,3 +24,6 @@ databaseChangeLog:
       file: db/changelog/changeset/v-1.0/fill/fill-deal_type-table.yaml
   - include:
       file: db/changelog/changeset/v-1.0/fill/fill-contractor_role-table.yaml
+
+  - include:
+      file: db/changelog/changeset/v-1.1/inbox-event.yaml
