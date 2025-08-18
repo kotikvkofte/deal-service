@@ -10,6 +10,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,16 +27,32 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String CONTRACTORS_EXCHANGE = "contractors_contractor_exchange";
-    public static final String DEALS_CONTRACTOR_QUEUE = "deals_contractor_queue";
-    public static final String DEALS_CONTRACTOR_ROUTING_KEY = "contractor.updated";
+    //exchanges
+    @Value("${spring.rabbitmq.exchanges.contractor}")
+    private String contractorsExchange;
 
-    public static final String DEALS_DEAD_EXCHANGE = "deals_dead_exchange";
-    public static final String DEALS_CONTRACTOR_DEAD_QUEUE = "deals_contractor_dead_queue";
-    public static final String DEALS_DEAD_ROUTING_KEY = "dead.contractor";
+    @Value("${spring.rabbitmq.exchanges.dead}")
+    private String dealsDeadExchange;
 
-    public static final String DEALS_RETRY_EXCHANGE = "deal_contractor_dead_exchange";
-    public static final String DEALS_RETRY_ROUTING_KEY = "retry.contractor";
+    @Value("${spring.rabbitmq.exchanges.retry}")
+    private String dealsRetryExchange;
+
+    //queues
+    @Value("${spring.rabbitmq.queues.contractor}")
+    private String dealContractorsQueue;
+
+    @Value("${spring.rabbitmq.queues.dead}")
+    private String dealsContractorDeadQueue;
+
+    //routing keys
+    @Value("${spring.rabbitmq.routing-keys.contractor}")
+    private String dealContractorsRoutingKey;
+
+    @Value("${spring.rabbitmq.routing-keys.dead}")
+    private String dealsDeadRoutingKey;
+
+    @Value("${spring.rabbitmq.routing-keys.retry}")
+    private String dealsRetryRoutingKey;
 
     /**Конвертер для десериализации payload из сообщения*/
     @Bean
@@ -59,15 +76,15 @@ public class RabbitMQConfig {
     /**Обменник, в который публикует сервис контрагентов*/
     @Bean
     public TopicExchange contractorsExchange() {
-        return new TopicExchange(CONTRACTORS_EXCHANGE, true, false);
+        return new TopicExchange(contractorsExchange, true, false);
     }
 
     /**Основная очередь сервиса сделок*/
     @Bean
     public Queue dealsQueue() {
-        return QueueBuilder.durable(DEALS_CONTRACTOR_QUEUE)
-                .withArgument("x-dead-letter-exchange", DEALS_DEAD_EXCHANGE)
-                .withArgument("x-dead-letter-routing-key", DEALS_DEAD_ROUTING_KEY)
+        return QueueBuilder.durable(dealContractorsQueue)
+                .withArgument("x-dead-letter-exchange", dealsDeadExchange)
+                .withArgument("x-dead-letter-routing-key", dealsDeadRoutingKey)
                 .build();
     }
 
@@ -75,23 +92,23 @@ public class RabbitMQConfig {
     public Binding binding() {
         return BindingBuilder.bind(dealsQueue())
                 .to(contractorsExchange())
-                .with(DEALS_CONTRACTOR_ROUTING_KEY);
+                .with(dealContractorsRoutingKey);
     }
 
     //dead
     /**dead-letter обменник*/
     @Bean
     public TopicExchange dealsDeadExchange() {
-        return new TopicExchange(DEALS_DEAD_EXCHANGE, true, false);
+        return new TopicExchange(dealsDeadExchange, true, false);
     }
 
     /**dead-letter очередь*/
     @Bean
     public Queue dealsContractorDeadQueue() {
-        return QueueBuilder.durable(DEALS_CONTRACTOR_DEAD_QUEUE)
+        return QueueBuilder.durable(dealsContractorDeadQueue)
                 .withArgument("x-message-ttl", 300000)
-                .withArgument("x-dead-letter-exchange", DEALS_RETRY_EXCHANGE)
-                .withArgument("x-dead-letter-routing-key", DEALS_RETRY_ROUTING_KEY)
+                .withArgument("x-dead-letter-exchange", dealsRetryExchange)
+                .withArgument("x-dead-letter-routing-key", dealsRetryRoutingKey)
                 .build();
     }
 
@@ -99,21 +116,21 @@ public class RabbitMQConfig {
     public Binding deadBinding() {
         return BindingBuilder.bind(dealsContractorDeadQueue())
                 .to(dealsDeadExchange())
-                .with(DEALS_DEAD_ROUTING_KEY);
+                .with(dealsDeadRoutingKey);
     }
 
     //retry
     /**Retry-обменник, из которого сообщение возвращается в рабочую очередь*/
     @Bean
     public TopicExchange dealsRetryExchange() {
-        return new TopicExchange(DEALS_RETRY_EXCHANGE, true, false);
+        return new TopicExchange(dealsRetryExchange, true, false);
     }
 
     @Bean
     public Binding retryBinding() {
         return BindingBuilder.bind(dealsQueue())
                 .to(dealsRetryExchange())
-                .with(DEALS_RETRY_ROUTING_KEY);
+                .with(dealsRetryRoutingKey);
     }
 
 }

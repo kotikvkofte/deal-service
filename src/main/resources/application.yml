@@ -4,15 +4,26 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/deal-service-db
-#    username: user
-#    password: 1
-#  rabbitmq:
-#    host: localhost
-#    port: 5672
-#    username: guest
-#    password: guest
+  datasource:
+    url: jdbc:postgresql://localhost:5432/deal-service-db
+    username: user
+    password: 1
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    exchanges:
+      contractor: "contractors_contractor_exchange"
+      dead: "deals_dead_exchange"
+      retry: "deal_contractor_dead_exchange"
+    queues:
+      contractor: "deals_contractor_queue"
+      dead: "deals_contractor_dead_queue"
+    routing-keys:
+      contractor: "contractor.updated"
+      dead: "dead.contractor"
+      retry: "retry.contractor"
 
 
 jwt:

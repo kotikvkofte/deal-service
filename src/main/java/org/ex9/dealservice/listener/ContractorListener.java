@@ -3,7 +3,6 @@ package org.ex9.dealservice.listener;
 import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.ex9.dealservice.config.RabbitMQConfig;
 import org.ex9.dealservice.dto.rabbit.ContractorDto;
 import org.ex9.dealservice.exception.DealContractorNotFondException;
 import org.ex9.dealservice.model.InboxEvent;
@@ -21,7 +20,7 @@ import java.util.UUID;
 /**
  * Слушатель очереди сообщений о контрагентах.
  * <p>
- * Обрабатывает сообщения из {@link RabbitMQConfig#DEALS_CONTRACTOR_QUEUE}.
+ * Обрабатывает сообщения из dealContractorsQueue.
  * Использует шаблон inbox для защиты от повторной обработки сообщений (каждое сообщение проверяется по уникальному {@code messageId}).
  * </p>
  * @author Краковев Артём
@@ -43,7 +42,7 @@ public class ContractorListener {
      *   <li>Если возникает ошибка (например, проблемы с БД) — сообщение отклоняется (REJECT) и попадает в DLQ.</li>
      * </ul>
      */
-    @RabbitListener(queues = RabbitMQConfig.DEALS_CONTRACTOR_QUEUE, containerFactory = "rabbitListenerContainerFactory")
+    @RabbitListener(queues = "${spring.rabbitmq.queues.contractor}", containerFactory = "rabbitListenerContainerFactory")
     public void handle(ContractorDto contractorDto,
                        Channel channel,
                        @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag,
