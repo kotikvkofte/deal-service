@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-inbox_event-table
+      author: Artyom
+      comment: "Создание таблицы inbox_event"
+      changes:
+        - createTable:
+            tableName: inbox_event
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: type
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: received_at
+                  type: timestamp
+                  constraints:
+                    nullable: false

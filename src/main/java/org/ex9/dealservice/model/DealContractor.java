@@ -19,6 +19,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -63,7 +64,7 @@ public class DealContractor {
     private LocalDate createDate;
 
     @Column(name = "modify_date")
-    private LocalDate modifyDate;
+    private LocalDateTime modifyDate;
 
     @Column(name = "create_user_id", length = Integer.MAX_VALUE)
     private String createUserId;
