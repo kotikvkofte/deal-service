@@ -13,6 +13,7 @@ spring:
     port: 5672
     username: guest
     password: guest
+    retryCount: 5
     exchanges:
       contractor: "contractors_contractor_exchange"
       dead: "deals_dead_exchange"

@@ -93,7 +93,6 @@ public class DealContractorService {
 
     @Transactional
     public void updateDealContractorFomRabbit(ContractorDto contractorDto) throws DealContractorNotFondException {
-//        throw new RuntimeException("Test error");
         String contractorId = contractorDto.getId();
 
         List<DealContractor> dealContractors = dealContractorRepository.findAllByContractorIdAndIsActiveTrue(contractorId);
