@@ -2,6 +2,7 @@ package org.ex9.dealservice.service;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.ex9.dealservice.config.RedisConfig;
 import org.ex9.dealservice.dto.DealChangeStatusDto;
 import org.ex9.dealservice.dto.DealResponseDto;
 import org.ex9.dealservice.dto.DealSaveRequestDto;
@@ -15,6 +16,8 @@ import org.ex9.dealservice.repository.DealRepository;
 import org.ex9.dealservice.repository.DealSpecification;
 import org.ex9.dealservice.repository.DealStatusRepository;
 import org.ex9.dealservice.repository.DealSumRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -47,6 +50,7 @@ public class DealService {
      * @return UUID сохранённой сделки
      */
     @Transactional
+    @CacheEvict(key = "#request.id", cacheNames = RedisConfig.DEALS)
     public UUID dealSave(DealSaveRequestDto request) {
         Deal deal;
         boolean isNewDeal = request.getId() == null;
@@ -110,6 +114,7 @@ public class DealService {
      * @param request DTO с ID сделки и новым статусом
      */
     @Transactional
+    @CacheEvict(key = "#request.dealId", cacheNames = RedisConfig.DEALS)
     public void changeStatus(DealChangeStatusDto request) {
 
         var deal = dealRepository.findByIdAndIsActiveTrue(request.getDealId())
@@ -129,6 +134,7 @@ public class DealService {
      * @return DTO сделки
      */
     @Transactional(readOnly = true)
+    @Cacheable(key = "#id", cacheNames = RedisConfig.DEALS)
     public DealResponseDto getDealById(UUID id) {
         Deal deal = dealRepository.findByIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new DealNotFondException("Deal with id '" + id + "' not found"));
