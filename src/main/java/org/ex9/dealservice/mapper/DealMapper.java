@@ -230,12 +230,38 @@ public class DealMapper {
         return dealSum;
     }
 
-    private DealTypeDto toDealTypeDto(DealType type) {
+    /**
+     * Преобразует сущность статуса сделки в DTO.
+     *
+     * @param status объект DealStatus
+     * @return объект DealStatusDto
+     */
+    public DealStatusDto toDealStatusDto(DealStatus status) {
+        return status == null ? null : new DealStatusDto(status.getId(), status.getName());
+    }
+
+    /**
+     * Преобразует сущность типа сделки в DTO.
+     *
+     * @param type объект DealType
+     * @return объект DealTypeDto
+     */
+    public DealTypeDto toDealTypeDto(DealType type) {
         return type == null ? null : new DealTypeDto(type.getId(), type.getName());
     }
 
-    private DealStatusDto toDealStatusDto(DealStatus status) {
-        return status == null ? null : new DealStatusDto(status.getId(), status.getName());
+    /**
+     * Преобразует DTO в сущность типа сделки.
+     *
+     * @param dto объект DealType
+     * @return объект DealTypeDto
+     */
+    public DealType toDealType(DealTypeDto dto) {
+        return dto == null ? null : DealType.builder()
+                .id(dto.getId() == null ? null : dto.getId())
+                .name(dto.getName())
+                .isActive(true)
+                .build();
     }
 
     private List<DealSumDto> toDealSumDto(UUID dealId) {
